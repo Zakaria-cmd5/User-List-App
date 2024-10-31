@@ -13,6 +13,7 @@ const Search = ({ onSearch }: Props) => {
         e.preventDefault();
         if (ref.current) onSearch(ref.current.value);
       }}
+      className="w-full"
     >
       <input
         type="text"
