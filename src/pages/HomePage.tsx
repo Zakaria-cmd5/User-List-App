@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import ErrorMessage from "../components/ErrorMessage";
+import UserCardSkeleton from "../components/UserCardSkeleton";
 
 type UserObject = {
   id: number;
@@ -20,7 +21,11 @@ type ApiResponse = {
 };
 
 const HomePage = () => {
-  const { data: users, error } = useQuery<ApiResponse, Error>({
+  const {
+    data: users,
+    error,
+    isLoading,
+  } = useQuery<ApiResponse, Error>({
     queryKey: ["users"],
     queryFn: () =>
       axios
@@ -29,6 +34,8 @@ const HomePage = () => {
   });
 
   if (error) return <ErrorMessage>{error.message}</ErrorMessage>;
+
+  if (isLoading) return <UserCardSkeleton />;
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mx-4 my-4">
