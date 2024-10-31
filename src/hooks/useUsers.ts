@@ -17,14 +17,14 @@ type ApiResponse = {
   total_pages: number;
 };
 
-const useUsers = () => {
+const useUsers = (page: number) => {
   return useQuery<ApiResponse, Error>({
-    queryKey: ["users"],
+    queryKey: ["users", page],
     queryFn: () =>
       axios
-        .get<ApiResponse>("https://reqres.in/api/users?page=1")
+        .get<ApiResponse>(`https://reqres.in/api/users?page=${page}`)
         .then((res) => res.data),
-    staleTime: 1 * 60 * 1000, // 1m
+    staleTime: 1 * 60 * 1000, // 1 minute
   });
 };
 
