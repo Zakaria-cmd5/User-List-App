@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 type UserObject = {
   id: number;
@@ -9,7 +10,7 @@ type UserObject = {
   avatar: string;
 };
 
-function App() {
+const HomePage = () => {
   const [users, setUsers] = useState<UserObject[]>([]);
 
   useEffect(() => {
@@ -23,7 +24,8 @@ function App() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mx-4 my-4">
       {users.map((user) => (
-        <div
+        <Link
+          to={`/user/${user.id}`}
           key={user.id}
           className="border border-gray-300 rounded-lg p-4 bg-white shadow-lg transform transition-transform duration-300 hover:scale-105 hover:shadow-xl cursor-pointer"
         >
@@ -38,10 +40,10 @@ function App() {
             </p>
             <p className="text-sm text-gray-600">{user.email}</p>
           </div>
-        </div>
+        </Link>
       ))}
     </div>
   );
-}
+};
 
-export default App;
+export default HomePage;
