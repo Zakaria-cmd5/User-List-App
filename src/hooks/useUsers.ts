@@ -24,6 +24,7 @@ const useUsers = () => {
       axios
         .get<ApiResponse>("https://reqres.in/api/users?page=1")
         .then((res) => res.data),
+    staleTime: 1 * 60 * 1000, // 1m
   });
 };
 
