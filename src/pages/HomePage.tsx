@@ -1,5 +1,5 @@
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 type UserObject = {
@@ -10,20 +10,26 @@ type UserObject = {
   avatar: string;
 };
 
-const HomePage = () => {
-  const [users, setUsers] = useState<UserObject[]>([]);
+type ApiResponse = {
+  data: UserObject[];
+  page: number;
+  per_page: number;
+  total: number;
+  total_pages: number;
+};
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const response = await axios.get("https://reqres.in/api/users?page=1");
-      setUsers(response.data.data);
-    };
-    fetchUser();
-  }, []);
+const HomePage = () => {
+  const { data: users } = useQuery({
+    queryKey: ["users"],
+    queryFn: () =>
+      axios
+        .get<ApiResponse>("https://reqres.in/api/users?page=1")
+        .then((res) => res.data),
+  });
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mx-4 my-4">
-      {users.map((user) => (
+      {users?.data?.map((user) => (
         <Link
           to={`/user/${user.id}`}
           key={user.id}
