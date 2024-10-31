@@ -1,37 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { Link } from "react-router-dom";
 import ErrorMessage from "../components/ErrorMessage";
 import UserCardSkeleton from "../components/UserCardSkeleton";
-
-type UserObject = {
-  id: number;
-  email: string;
-  first_name: string;
-  last_name: string;
-  avatar: string;
-};
-
-type ApiResponse = {
-  data: UserObject[];
-  page: number;
-  per_page: number;
-  total: number;
-  total_pages: number;
-};
+import useUsers from "../hooks/useUsers";
 
 const HomePage = () => {
-  const {
-    data: users,
-    error,
-    isLoading,
-  } = useQuery<ApiResponse, Error>({
-    queryKey: ["users"],
-    queryFn: () =>
-      axios
-        .get<ApiResponse>("https://reqres.in/api/users?page=1")
-        .then((res) => res.data),
-  });
+  const { data: users, error, isLoading } = useUsers();
 
   if (error) return <ErrorMessage>{error.message}</ErrorMessage>;
 
