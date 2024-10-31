@@ -1,26 +1,23 @@
-import { Link, useOutletContext } from "react-router-dom";
+import { Link } from "react-router-dom";
 import ErrorMessage from "../components/ErrorMessage";
 import UserCardSkeleton from "../components/UserCardSkeleton";
 import useUsers from "../hooks/useUsers";
-
-interface LayoutContext {
-  searchTerm: string;
-}
+import useSearchStore from "../store/searchStore";
 
 const HomePage = () => {
   const { data: users, error, isLoading } = useUsers();
 
-  const { searchTerm } = useOutletContext<LayoutContext>();
-
-  if (error) return <ErrorMessage>{error.message}</ErrorMessage>;
-
-  if (isLoading) return <UserCardSkeleton />;
+  const searchTerm = useSearchStore((state) => state.searchTerm);
 
   const filteredUsers = users?.data?.filter((user) =>
     `${user.first_name} ${user.last_name}`
       .toLowerCase()
       .includes(searchTerm.toLowerCase())
   );
+
+  if (error) return <ErrorMessage>{error.message}</ErrorMessage>;
+
+  if (isLoading) return <UserCardSkeleton />;
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mx-4 my-4">

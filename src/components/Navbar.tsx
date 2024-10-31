@@ -1,19 +1,7 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import Search from "./Search";
 
-interface Props {
-  onSearch: (searchTerm: string) => void;
-}
-
-const Navbar = ({ onSearch }: Props) => {
-  const [, setSearchTerm] = useState("");
-
-  const handleSearch = (term: string) => {
-    setSearchTerm(term);
-    onSearch(term);
-  };
-
+const Navbar = () => {
   return (
     <nav className="flex justify-between items-center gap-12 my-2 mx-2">
       <Link
@@ -24,7 +12,7 @@ const Navbar = ({ onSearch }: Props) => {
       >
         Users
       </Link>
-      <Search onSearch={handleSearch} />
+      <Search />
     </nav>
   );
 };

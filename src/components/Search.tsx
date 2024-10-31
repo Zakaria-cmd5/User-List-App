@@ -1,17 +1,16 @@
 import { useRef } from "react";
+import useSearchStore from "../store/searchStore";
 
-interface Props {
-  onSearch: (searchText: string) => void;
-}
-
-const Search = ({ onSearch }: Props) => {
+const Search = () => {
   const ref = useRef<HTMLInputElement>(null);
+
+  const setSearchTerm = useSearchStore((state) => state.setSearchTerm);
 
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        if (ref.current) onSearch(ref.current.value);
+        if (ref.current) setSearchTerm(ref.current.value);
       }}
       className="w-full"
     >
