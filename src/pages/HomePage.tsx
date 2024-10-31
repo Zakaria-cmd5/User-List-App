@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import ErrorMessage from "../components/ErrorMessage";
 
 type UserObject = {
   id: number;
@@ -19,13 +20,15 @@ type ApiResponse = {
 };
 
 const HomePage = () => {
-  const { data: users } = useQuery({
+  const { data: users, error } = useQuery<ApiResponse, Error>({
     queryKey: ["users"],
     queryFn: () =>
       axios
         .get<ApiResponse>("https://reqres.in/api/users?page=1")
         .then((res) => res.data),
   });
+
+  if (error) return <ErrorMessage>{error.message}</ErrorMessage>;
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mx-4 my-4">
