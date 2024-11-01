@@ -4,16 +4,25 @@ import ErrorMessage from "../components/ErrorMessage";
 import Pagination from "../components/Pagination";
 import UserCardSkeleton from "../components/UserCardSkeleton";
 import useUsers from "../hooks/useUsers";
+import useSearchStore from "../store/searchStore";
 
 const HomePage = () => {
+  const searchTerm = useSearchStore((s) => s.searchTerm);
+
   const [currentPage, setCurrentPage] = useState(1);
+
   const { data: users, error, isLoading } = useUsers(currentPage);
 
   if (error) return <ErrorMessage>{error.message}</ErrorMessage>;
 
   if (isLoading) return <UserCardSkeleton />;
 
-  const filteredUsers = users?.data || [];
+  const filteredUsers = users?.data?.filter((user) =>
+    `${user.first_name} ${user.last_name}`
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase())
+  );
+
   const totalPages = users?.total_pages || 1;
 
   const goToPreviousPage = () => {
